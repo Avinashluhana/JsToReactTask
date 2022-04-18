@@ -6,15 +6,6 @@ import * as d3 from "d3";
 
 const Home = ({ data }) => {
   const ref = useD3(() => {
-    function showDetail(d, i) {
-      console.log(i);
-      d3.select(this.childNodes[0]).attr("fill-opacity", 0);
-    }
-
-    function hideDetail(d, i) {
-      d3.select(this.childNodes[0]).attr("fill-opacity", 1);
-    }
-
     function perc2color(rssi, s, t) {
       // scale -40 to -80
       var perc = 1 - (Math.abs(rssi) - 40) / (80 - 40);
@@ -119,7 +110,6 @@ const Home = ({ data }) => {
         return `${d.source} -> ${d.target} = ${d.RSSI}`;
       })
       .on("mousemove", function (e) {
-        const data = d3.select(e.target).data()[0];
         const tip = document.getElementById("tool-tip");
         tip.innerText = e.target.getAttribute("tip");
         tip.style.left = e.clientX + "px";
@@ -182,8 +172,18 @@ const Home = ({ data }) => {
   });
   return (
     <div>
-      <div id="my_dataviz"></div>
-      <div id="tool-tip"></div>
+      <svg
+        ref={ref}
+        style={{
+          height: 1000,
+          width: "100%",
+          marginRight: "0px",
+          marginLeft: "0px",
+        }}
+      >
+        <g id="my_dataviz" />
+        <g id="tool-tip" />
+      </svg>
     </div>
   );
 };
